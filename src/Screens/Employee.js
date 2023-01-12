@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { nanoid } from 'nanoid';
 import React, { useState, useEffect } from 'react'
 
 function Employee() {
@@ -9,36 +10,36 @@ function Employee() {
   const[department,setDepartment]=useState("")
   const[status,setstatus]=useState("")
   const[chechked,setchecked]=useState();
-  const[EmpEdit,setEmpEdit]=useState([])
 
-  const GetAll = () => {
-  };
+  function getAll(){
+    axios.get("https://localhost:44391/api/Employee")
+    .then((d) => {
+      setEmployee(d.data);
+      console.log(d.data)
+    }).catch((error)=>{
+      alert("something went wrong")
+    })
+
+  }
+
   function deleteclick(id){
     axios.delete("https://localhost:44391/api/Employee/"+id).then((d)=>{
       alert("Data deleted")
-      GetAll();
+      getAll();
     })
     .catch((error)=>{
       alert("Something went wrong with Apis")
     })
   }
- const Removeclick=(index)=>{
-  debugger;
-  employee.splice(index,1);
-  setEmployee([...employee])
- 
+ const Removeclick=(empId)=>{
+  // debugger;
+  // let index=employee.indexOf(empId)
+  // employee.splice(index,1);
+  // console.log(index)
+   let index=employee.indexOf(empId)
+   employee.splice(index,1);
+   setEmployee([...employee])
  }
- useEffect(()=>{
-  axios.get("https://localhost:44391/api/Employee")
-  .then((d) => {
-    setEmployee(d.data);
-    console.log(d.data)
-
-  })
-  .catch((error) => {
-    console.log(error);
-  });
- },[])
   function RenderData() {
     let RowData = [];
     employee?.map((item) =>{
@@ -65,7 +66,7 @@ function Employee() {
           <td>
             <button className='btn btn-danger'onClick={()=>deleteclick(item.id)}>Delete</button>
             &nbsp;
-            <button className='btn btn-info'onClick={Removeclick}>Remove</button>
+            <button className='btn btn-info'onClick={()=>Removeclick(item.empId)}>Remove</button>
             
             </td>
         </tr>
@@ -84,19 +85,12 @@ function Employee() {
     }
     console.log(Employeeobj)
     setEmployee([...employee,Employeeobj]);
-    setEmpEdit([...EmpEdit,Employeeobj])
     setempId("")
     setname("")
     setDepartment("")
     setstatus("")
   }
-  const editclick=(data)=>{
-    const emplo=employee[data];
-    setempId(emplo.name);
-    setname(emplo.name);
-    setDepartment(emplo.department);
-    
-  }
+  
   const checkboxValues = (e) => {
    var Clickval = e.status;
     if(Clickval==false)
@@ -112,16 +106,21 @@ function Employee() {
       setchecked(false);
     }
   };
-  
-  const updateClick=()=>{
-
-  }
+  useEffect(()=>{
+    // axios.get("https://localhost:44391/api/Employee")
+    // .then((d) => {
+    //   setEmployee(d.data);
+    //   console.log(d.data)
+    // })
+    getAll();
+  },[])
     const Saveclick = () => {
     var data=employee;
     var datacoming=data.filter((e)=> e.status==true)
    .map((filter)=>{
     console.log(datacoming);
     let DataObj={
+            empId:filter.empId,
             name:filter.name,
             department:filter.department,
             status:filter.status
@@ -129,7 +128,6 @@ function Employee() {
         axios
             .post("https://localhost:44391/api/Employee",DataObj)
             .then((d) => {
-            //  GetAll()
             })
             .catch((e) => {
               console.log(e);
@@ -246,6 +244,7 @@ function Employee() {
           </div>
         </div>
       </form>
+      {/* Edit */}
     </div>
   )
 }
