@@ -12,13 +12,6 @@ function Employee() {
   const[EmpEdit,setEmpEdit]=useState([])
 
   const GetAll = () => {
-    axios.get("https://localhost:44391/api/Employee")
-      .then((d) => {
-        setEmployee(d.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
   function deleteclick(id){
     axios.delete("https://localhost:44391/api/Employee/"+id).then((d)=>{
@@ -29,13 +22,23 @@ function Employee() {
       alert("Something went wrong with Apis")
     })
   }
- const Removeclick=(empId)=>{
+ const Removeclick=(index)=>{
   debugger;
-  let index=employee.indexOf(empId)
   employee.splice(index,1);
-  console.log(index)
-  GetAll()
+  setEmployee([...employee])
+ 
  }
+ useEffect(()=>{
+  axios.get("https://localhost:44391/api/Employee")
+  .then((d) => {
+    setEmployee(d.data);
+    console.log(d.data)
+
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+ },[])
   function RenderData() {
     let RowData = [];
     employee?.map((item) =>{
@@ -60,10 +63,9 @@ function Employee() {
           </td>
           }
           <td>
-            <button className='btn btn-success'onClick={()=>editclick(item)} data-toggle="modal" data-target="#editmodal">Edit</button>&nbsp;
             <button className='btn btn-danger'onClick={()=>deleteclick(item.id)}>Delete</button>
             &nbsp;
-            <button className='btn btn-info'onClick={()=>Removeclick(item.empId)}>Remove</button>
+            <button className='btn btn-info'onClick={Removeclick}>Remove</button>
             
             </td>
         </tr>
@@ -89,10 +91,11 @@ function Employee() {
     setstatus("")
   }
   const editclick=(data)=>{
-    setEmpEdit(data)
-  }
-  const changeHandler=(event)=>{
-  setEmpEdit({...EmpEdit,[event.target.value]:event.target.name},)
+    const emplo=employee[data];
+    setempId(emplo.name);
+    setname(emplo.name);
+    setDepartment(emplo.department);
+    
   }
   const checkboxValues = (e) => {
    var Clickval = e.status;
@@ -109,9 +112,10 @@ function Employee() {
       setchecked(false);
     }
   };
-  useEffect(()=>{
-   GetAll();
-  },[])
+  
+  const updateClick=()=>{
+
+  }
     const Saveclick = () => {
     var data=employee;
     var datacoming=data.filter((e)=> e.status==true)
@@ -125,7 +129,7 @@ function Employee() {
         axios
             .post("https://localhost:44391/api/Employee",DataObj)
             .then((d) => {
-             GetAll()
+            //  GetAll()
             })
             .catch((e) => {
               console.log(e);
@@ -224,87 +228,14 @@ function Employee() {
                       id="department"
                       name="department"
                      className="form-control"
-                       onChange={(event) => setDepartment(event.target.value)}
-                       value={department}
+                     onChange={(event) => setDepartment(event.target.value)}
+                     value={department}
                        />
                   </div>
                 </div>
                 <div className="modal-footer">
                   <button type="submit" className="btn btn-primary"data-dismiss="modal" onClick={Submit}>
                     save
-                  </button>
-                  <button className="btn btn-danger" data-dismiss="modal">
-                    cancel
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-      {/* Edit */}
-      <form autoComplete="off" className="col-sm-4" onSubmit={(e)=> {
-        e.preventDefault()}}>
-        <div className="modal fade" id="editmodal" role="dialog">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              {/* Header */}
-              <div className="modal-header">
-                <div className="modal-title">Edit Employee</div>
-                <button className="close" data-dismiss="modal">
-                  <span>&times;</span>
-                </button>
-              </div>
-              {/* body */}
-              <div className="modal-body">
-                <div className="form-group row">
-                  <label for="id" className="col-sm-4">
-                    Id
-                  </label>
-                  <div className="col-sm-8">
-                    <input
-                      type="number"
-                      id="id"
-                      name="id"
-                      className="form-control"
-                      value={EmpEdit.empId}
-                      onChange={changeHandler} 
-                     />
-                  </div>
-                </div>
-                <div className="form-group row">
-                  <label for="name" className="col-sm-4">
-                    Name
-                  </label>
-                  <div className="col-sm-8">
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      className="form-control"
-                      value={EmpEdit.name}
-                      onChange={changeHandler} 
-                      />
-                  </div>
-                </div>
-                <div className="form-group row">
-                  <label for="department" className="col-sm-4">
-                    DepartmentName
-                  </label>
-                  <div className="col-sm-8">
-                    <input
-                      type="text"
-                      id="department"
-                      name="department"
-                     className="form-control"
-                     value={EmpEdit.department}
-                     onChange={changeHandler}
-                       />
-                  </div>
-                </div>
-                <div className="modal-footer">
-                  <button type="submit" className="btn btn-primary"data-dismiss="modal">
-                    update
                   </button>
                   <button className="btn btn-danger" data-dismiss="modal">
                     cancel
