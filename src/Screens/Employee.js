@@ -23,9 +23,9 @@ function Employee() {
       });
   }
 
-  function deleteclick(id) {
+  function deleteclick(Id) {
     axios
-      .delete("https://localhost:44391/api/Employee/" + id)
+      .delete("https://localhost:44391/api/Employee/" + Id)
       .then((d) => {
         alert("Data deleted");
         getAll();
@@ -61,21 +61,21 @@ function Employee() {
                 name="status"
                 id="checkbox"
                 //defaultChecked={item.status===true&&false}
-                onClick={() => checkboxValues(item, item.empId)}
+                onClick={() => checkboxValues(item, item.Id)}
               />
             </td>
           )}
           <td>
             <button
               className="btn btn-danger"
-              onClick={() => deleteclick(item.id)}
+              onClick={() => deleteclick(item.Id)}
             >
               Delete
             </button>
             &nbsp;
             <button
               className="btn btn-info"
-              onClick={() => Removeclick(item.empId)}
+              onClick={() => Removeclick(item.Id)}
             >
               Remove
             </button>
