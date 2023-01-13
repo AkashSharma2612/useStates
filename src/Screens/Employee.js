@@ -117,29 +117,6 @@ function Employee() {
   useEffect(() => {
     getAll();
   }, []);
-
-  // const Saveclick = () => {
-  // debugger
-  //   var data=employee;
-  //   var datacoming=data.filter((e)=> e.status===true&&e.empId===0)
-  //   // console.log('datacoming',datacoming)
-  //  .map((filter)=>{
-  //   console.log(datacoming);
-  //   let DataObj={
-  //           name:filter.name,
-  //           department:filter.department,
-  //           status:filt0er.status
-  //    }
-  //       axios
-  //           .post("https://localhost:44391/api/Employee",DataObj)
-  //           .then((d) => {
-  //             getAll();
-  //           })
-  //           .catch((e) => {
-  //             console.log(e);
-  //        });
-  //   });
-  //}
   const Saveclick = () => {
     debugger;
     // const data=employee;
@@ -202,21 +179,6 @@ function Employee() {
               </div>
               {/* body */}
               <div className="modal-body">
-                {/* <div className="form-group row">
-                  <label for="id" className="col-sm-4">
-                    Id
-                  </label>
-                  <div className="col-sm-8">
-                    <input
-                      type="number"
-                      id="id"
-                      name="id"
-                      className="form-control"
-                       onChange={(event) =>setempId(event.target.value)}
-                       value={empId}
-                     />
-                  </div>
-                </div> */}
                 <div className="form-group row">
                   <label for="name" className="col-sm-4">
                     Name
